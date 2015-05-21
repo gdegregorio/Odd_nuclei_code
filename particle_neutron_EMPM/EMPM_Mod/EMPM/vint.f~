@@ -1,0 +1,68 @@
+       subroutine Vinteraction
+
+!********************************************************************
+!this program generate the interaction part of EMPM for odd nuclei
+!********************************************************************
+
+       use technical
+       use geom
+
+       include 'define.inc'
+       include 'parameters.inc'
+       include 'commons.inc'
+ 
+       integer :: ii,jj,j_sig,sigma,sig,si
+       double precision :: fatt1,fatt2,fatt3,vint,kk
+
+       double precision,allocatable ::Fcall(:,:,:)
+
+       Allocate(Fcall(dimbas,dimbas,0:jmax))
+  
+       Allocate(Vcall(dimbas,dimbas))
+
+       Vcall=0.d0
+
+       Fcall=0.d0
+
+       open(1,file='phon_int.dat',status='unknown',form='unformatted')
+         do while(.not.eof(1))
+         read(1,*) ii,jj,j_sig,kk
+         Fcall(ii,jj,j_sig)=kk
+         end do
+        close(1)
+
+
+       
+       fatt1=0.d0
+       fatt2=0.d0
+       fatt3=0.d0
+    
+
+       ii=0
+       jj=0
+       sig=0
+       
+       do ii=1,dimbas
+         jp=levn(bas(ii)%ir)%j2
+          jl=ph(bas(ii)%ilam)%Jph
+        do jj=1,dimbas
+          jp1=levn(bas(jj)%ir)%j2
+           jl1=ph(bas(jj)%ilam)%Jph
+       
+         vint=0.d0
+       
+        do sig=0,jmax
+           !if(abs(jp1-jp)/2.le.sigma.and.sigma.le.(jp1+jp)/2) then
+          fatt1=dsqrt(dble(2*sig+1))!**(0.5d0)
+          fatt2=racah(dble(jl),dble(sig),0.5d0*dble(Jtot),
+     &              0.5d0*dble(jp1),dble(jl1),0.5d0*dble(jp))
+          fatt3=Fcall(ii,jj,sig)
+          vint=vint+fatt1*fatt2*fatt3
+         end do
+         Vcall(ii,jj)=vint
+         end do
+        end do
+       deallocate(Fcall)
+       return
+
+        end subroutine

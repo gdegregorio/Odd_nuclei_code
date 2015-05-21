@@ -1,0 +1,12 @@
+rm eqm
+rm technical.mod
+rm geom.mod
+ifort geom.f 
+ifort technical.f 
+ifort *.f -O3 -parallel -L$MKLPATH -I$MKLINCLUDE -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -lpthread -i_dynamic -o eqm
+ifort -g *.f  -L$MKLPATH -I$MKLINCLUDE -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -lpthread -i_dynamic -o eqm_test
+
+#ifort *.f $MKLPATH/libmkl_lapack.a -o EDF -L$MKLPATH -lmkl_em64t -lguide -lpthread
+	
+	#-check -static
+

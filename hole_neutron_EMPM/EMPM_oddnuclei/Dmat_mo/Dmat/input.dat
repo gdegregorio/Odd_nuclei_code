@@ -1,0 +1,17 @@
+    40     20       !    A    Z
+     1     6        !    hole space for neutrons       
+     1     6        !    hole space for protons 
+     7    10        !    particle space for neutrons
+     7    10        !    particle space for protons
+     10.0           !    hbarom[MeV]
+    -1     1        !     Parity range
+     0     7        !     J range
+     7              !    indice dello stato da generare
+
+       
+
+
+
+
+
+
